@@ -1,47 +1,79 @@
 import React from 'react';
-import { Greeting } from './Greeting';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ThemeContext } from './ThemeContext';
+import { NavBar } from './NavBar';
+import {
+  ControlledFormPage,
+  HomePage,
+  CounterButtonPage,
+  NotFoundPage,
+  PeopleListPage,
+  ProtectedPage,
+  UncontrolledFormPage,
+  UserProfilePage,
+} from './pages';
+import { UserDataLoader } from './UserDataLoader';
+import { CounterButtonPageCB } from './class-based/CounterButtonPageCB';
 import './App.css';
-import { PeopleList } from './PeopleList';
 
-const people = [{
-  name: 'John',
-  age: 40,
-  hairColor: 'brown',
-}, {
-  name: 'Helga',
-  age: 25,
-  hairColor: 'red',
-}, {
-  name: 'Dwayne',
-  age: 55,
-  hairColor: 'blonde',
-}];
+const appLinks = [
+  { url: '/', label: 'Home' },
+  { url: '/counter', label: 'Counter' },
+  { url: '/people-list', label: 'People List' },
+  { url: '/forms', label: 'Forms' },
+  { url: '/user', label: 'User Profile' },
+];
+
+const formLinks = [
+  { url: '/forms/controlled', label: 'Controlled' },
+  { url: '/forms/uncontrolled', label: 'Uncontrolled' },
+];
 
 function App() {
-  let adjective = 'awesome';
-  let url = 'https://reactjs.org';
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <Greeting name="Shaun" numberOfMessages={10} />
-        <button onClick={() => alert('Hello!')}>Click Me!</button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <PeopleList people={people} />
-        <p>
-          This is so {adjective}
-        </p>
-        <a
-          className="App-link"
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeContext.Provider value="light">
+      <div className="App">
+        <Router>
+          <NavBar links={appLinks} />
+          <div className="App-header">
+            <Switch>
+              <Route path="/" exact>
+                <HomePage />
+              </Route>
+              <Route path="/counter">
+                <CounterButtonPage />
+              </Route>
+              <Route path="/people-list">
+                <PeopleListPage />
+              </Route>
+              <Route path="/protected">
+                <ProtectedPage />
+              </Route>
+              <Route path="/forms">
+                <Router>
+                  <NavBar links={formLinks} />
+                  <Route path="/forms/controlled">
+                    <ControlledFormPage />
+                  </Route>
+                  <Route path="/forms/uncontrolled">
+                    <UncontrolledFormPage />
+                  </Route>
+                </Router>
+              </Route>
+              <Route path="/user">
+                <UserProfilePage />
+              </Route>
+              <Route path="/class-based">
+                <CounterButtonPageCB />
+              </Route>
+              <Route>
+                <NotFoundPage />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </div>
+    </ThemeContext.Provider>
   );
 }
 

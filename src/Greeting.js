@@ -4,8 +4,8 @@ export const Greeting = ({ name, numberOfMessages }) => {
     if (!name) return null;
     let isMorning = (new Date()).getHours() < 12;
     let greetingHeader = isMorning
-        ? <h1>Good Morning {name}!</h1>
-        : <h1>Good Evening {name}!</h1>
+        ? <h3>Good Morning {name}!</h3>
+        : <h3>Good Evening {name}!</h3>
         
     return (
         <>
